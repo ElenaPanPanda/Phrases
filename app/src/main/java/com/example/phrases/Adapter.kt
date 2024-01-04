@@ -3,6 +3,7 @@ package com.example.phrases
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -12,7 +13,7 @@ class Adapter(
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val phrase: TextView = view.findViewById(R.id.phrase_tv)
         val author: TextView = view.findViewById(R.id.author_tv)
-        val deleteButton: TextView = view.findViewById(R.id.delete_button)
+        val deleteButton: ImageView = view.findViewById(R.id.delete_button)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -28,7 +29,7 @@ class Adapter(
         holder.phrase.text = dataList[position].phrase
         holder.author.text = dataList[position].author
 
-        holder.deleteButton.setOnClickListener{
+        holder.deleteButton.setOnClickListener {
             removeItem(holder.adapterPosition)
         }
     }
