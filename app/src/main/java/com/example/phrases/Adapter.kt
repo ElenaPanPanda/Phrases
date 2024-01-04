@@ -6,10 +6,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class Adapter() : RecyclerView.Adapter<Adapter.ViewHolder>() {
+class Adapter(
+    private val dataList: MutableList<QuoteData>
+) : RecyclerView.Adapter<Adapter.ViewHolder>() {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val phrase: TextView = view.findViewById(R.id.phrase_tv)
         val author: TextView = view.findViewById(R.id.author_tv)
+        val deleteButton: TextView = view.findViewById(R.id.delete_button)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -19,10 +22,19 @@ class Adapter() : RecyclerView.Adapter<Adapter.ViewHolder>() {
         )
     }
 
-    override fun getItemCount(): Int = PhrasesList.size
+    override fun getItemCount(): Int = dataList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.phrase.text = PhrasesList[position].phrase
-        holder.author.text = PhrasesList[position].author
+        holder.phrase.text = dataList[position].phrase
+        holder.author.text = dataList[position].author
+
+        holder.deleteButton.setOnClickListener{
+            removeItem(holder.adapterPosition)
+        }
+    }
+
+    private fun removeItem(position: Int) {
+        dataList.removeAt(position)
+        notifyItemRemoved(position)
     }
 }
