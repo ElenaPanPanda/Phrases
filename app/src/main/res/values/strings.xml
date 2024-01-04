@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Phrases</string>
+    <string name="delete">Delete</string>
+    <string name="no_reminder_set">No reminder set</string>
 </resources>

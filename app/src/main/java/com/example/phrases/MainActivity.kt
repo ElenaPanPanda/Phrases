@@ -2,6 +2,8 @@ package com.example.phrases
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.phrases.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -12,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-        
+        binding.recycleView.layoutManager = LinearLayoutManager(this)
+        binding.recycleView.adapter = Adapter()
     }
 }
