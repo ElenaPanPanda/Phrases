@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class Adapter(
-    private val dataList: MutableList<QuoteData>
+    public val dataList: MutableList<QuoteData>
 ) : RecyclerView.Adapter<Adapter.ViewHolder>() {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val phrase: TextView = view.findViewById(R.id.phrase_tv)
