@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
             private val intrinsicHeight = trashBinIcon?.intrinsicHeight
 
             private val background = GradientDrawable()
-            private val color = ContextCompat.getColor(this@MainActivity, R.color.gray)
+            private val color = ContextCompat.getColor(this@MainActivity, R.color.red)
 
             private val clearPaint =
                 Paint().apply { xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR) }

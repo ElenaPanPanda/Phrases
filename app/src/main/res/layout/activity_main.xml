@@ -43,6 +43,10 @@
             android:layout_margin="16dp"
             android:contentDescription="@string/fab"
             android:src="@drawable/ic_fab"
+            android:backgroundTint="@color/dark_blue"
+            app:tint="@color/white"
+            android:scaleType="center"
+            app:maxImageSize="32dp"
             tools:ignore="RtlHardcoded" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
