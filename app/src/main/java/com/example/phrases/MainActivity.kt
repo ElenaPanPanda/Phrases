@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         myHelper.attachToRecyclerView(recyclerView)
 
 
-        binding.reminderTextView.setOnClickListener {
+        binding.cardViewReminderSet.setOnClickListener {
             val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
 
                 calendar.set(Calendar.HOUR_OF_DAY, hour)

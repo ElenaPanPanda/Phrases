@@ -5,30 +5,60 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity" >
 
-    <TextView
-        android:id="@+id/reminderTextView"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_view_reminder_set"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:text="@string/no_reminder_set"
-        android:textSize="20sp"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:backgroundTint="@color/white"
+        app:cardCornerRadius="0dp"
+        android:layout_marginHorizontal="12dp"
+        app:strokeWidth="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/click_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/dark_blue"
+                android:text="@string/click_to_set_time"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/reminder_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/no_reminder_set"
+                android:padding="8dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="4dp"/>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginHorizontal="12dp"
-        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/reminderTextView">
+        app:layout_constraintTop_toBottomOf="@id/card_view_reminder_set">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
@@ -41,12 +71,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:layout_margin="16dp"
-            android:contentDescription="@string/fab"
-            android:src="@drawable/ic_fab"
             android:backgroundTint="@color/dark_blue"
-            app:tint="@color/white"
+            android:contentDescription="@string/fab"
             android:scaleType="center"
+            android:src="@drawable/ic_fab"
             app:maxImageSize="32dp"
+            app:tint="@color/white"
             tools:ignore="RtlHardcoded" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
