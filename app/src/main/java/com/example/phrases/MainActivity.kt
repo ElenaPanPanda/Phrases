@@ -7,7 +7,6 @@ import android.app.TimePickerDialog
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -28,10 +27,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val calendar = Calendar.getInstance()
-
-        val time = SimpleDateFormat("HH:mm:ss").format(calendar.time)
-        Log.d("tiem", time)
-
 
         val recyclerView = binding.recyclerView
         val linearLayoutManager = LinearLayoutManager(this)
@@ -70,11 +65,8 @@ class MainActivity : AppCompatActivity() {
                 calendar.set(Calendar.SECOND, 0)
 
                 if (calendar.before(Calendar.getInstance())) {
-                    calendar.add(Calendar.DATE, 1);
+                    calendar.add(Calendar.DATE, 1)
                 }
-
-                val time = SimpleDateFormat("HH:mm:ss").format(calendar.time)
-                Log.d("tiem on click", time)
 
                 val reminderTime = SimpleDateFormat("HH:mm").format(calendar.time)
                 binding.reminderTextView.text = getString(R.string.reminder_time, reminderTime)
@@ -92,6 +84,6 @@ class MainActivity : AppCompatActivity() {
         val alarmManager: AlarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
         val chosenTime = calendar.timeInMillis
 
-        alarmManager.set(AlarmManager.RTC_WAKEUP, chosenTime, pendingIntent)
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, chosenTime, pendingIntent)
     }
 }
