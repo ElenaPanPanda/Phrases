@@ -9,4 +9,5 @@
     <string name="phrase">phrase</string>
     <string name="author">author</string>
     <string name="quotes">“%1$s“</string>
+    <string name="your_phrase_today">Your phrase today</string>
 </resources>

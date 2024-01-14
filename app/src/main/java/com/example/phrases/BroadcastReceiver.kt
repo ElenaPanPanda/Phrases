@@ -16,10 +16,15 @@ class BroadcastReceiver : BroadcastReceiver() {
         val pIntent = PendingIntent.getActivity(context, 0, myIntent, PendingIntent.FLAG_IMMUTABLE)
 
         val randomPhrase = takeRandomPhraseAndAuthor(PhrasesList)
+        val title =
+            if (randomPhrase.author.isEmpty())
+                context.getString(R.string.your_phrase_today)
+            else
+                randomPhrase.author
 
         val notificationBuilder = NotificationCompat.Builder(context, createNotificationChannel(context))
             .setSmallIcon(R.drawable.ic_alarm)
-            .setContentTitle(randomPhrase.author)
+            .setContentTitle(title)
             .setContentText(randomPhrase.phrase)
             .setStyle(NotificationCompat.BigTextStyle())
             .setPriority(NotificationCompat.PRIORITY_HIGH)
