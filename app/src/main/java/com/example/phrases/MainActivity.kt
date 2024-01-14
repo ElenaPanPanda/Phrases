@@ -2,12 +2,15 @@ package com.example.phrases
 
 import android.annotation.SuppressLint
 import android.app.AlarmManager
+import android.app.AlertDialog
 import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,6 +37,10 @@ class MainActivity : AppCompatActivity() {
 
         recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = adapter
+
+        fab.setOnClickListener {
+            showAlertDialog()
+        }
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -73,17 +80,62 @@ class MainActivity : AppCompatActivity() {
 
                 createNotification(calendar)
             }
-            TimePickerDialog(this, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true).show()
+            TimePickerDialog(
+                this,
+                timeSetListener,
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE),
+                true
+            ).show()
         }
     }
 
     private fun createNotification(calendar: Calendar) {
         val intent = Intent(applicationContext, BroadcastReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent =
+            PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_IMMUTABLE)
 
         val alarmManager: AlarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
         val chosenTime = calendar.timeInMillis
 
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, chosenTime, pendingIntent)
     }
+
+    private fun showAlertDialog() {
+        val alertDialogView =
+            LayoutInflater.from(this).inflate(R.layout.alert_dialog_view, null, false)
+
+        val alertDialogBuilder = AlertDialog.Builder(this)
+            .setTitle("Add your phrase")
+            .setView(alertDialogView)
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
+
+        val positiveButton = alertDialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE)
+        positiveButton.setOnClickListener {
+            val phraseEditText = alertDialogView.findViewById<EditText>(R.id.phrase_dialog_et)
+            val authorEditText = alertDialogView.findViewById<EditText>(R.id.author_dialog_et)
+
+            if (phraseEditText.text.toString() != "") {
+                adapter.dataList.add(
+                    QuoteData(
+                        getString(R.string.quotes, phraseEditText.text),
+                        authorEditText.text.toString()
+                    )
+                )
+                alertDialogBuilder.dismiss()
+            } else
+                alertDialogBuilder.dismiss()
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
