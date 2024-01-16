@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/ic_phrases_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Phrases"
-        tools:targetApi="31">
+        tools:targetApi="31"
+        android:name=".PhrasesApplication">
 
         <receiver android:name=".BroadcastReceiver" />
 

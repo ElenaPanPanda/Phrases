@@ -17,15 +17,12 @@ class BroadcastReceiver : BroadcastReceiver() {
 
         val randomPhrase = takeRandomPhraseAndAuthor(PhrasesList)
         val title =
-            if (randomPhrase.author.isEmpty())
-                context.getString(R.string.your_phrase_today)
-            else
-                randomPhrase.author
+            randomPhrase.author.ifEmpty { context.getString(R.string.your_phrase_today) }
 
         val notificationBuilder = NotificationCompat.Builder(context, createNotificationChannel(context))
             .setSmallIcon(R.drawable.ic_alarm)
             .setContentTitle(title)
-            .setContentText(randomPhrase.phrase)
+            .setContentText(randomPhrase.quote)
             .setStyle(NotificationCompat.BigTextStyle())
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
@@ -54,7 +51,7 @@ class BroadcastReceiver : BroadcastReceiver() {
         return channelID
     }
 
-    private fun takeRandomPhraseAndAuthor(list: List<QuoteData>): QuoteData {
+    private fun takeRandomPhraseAndAuthor(list: List<Phrase>): Phrase {
         val randomPhraseNumber = Random.nextInt(0, list.size)
         return list[randomPhraseNumber]
     }

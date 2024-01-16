@@ -20,8 +20,10 @@ import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var db: PhraseDatabase
+    private lateinit var adapter: Adapter
 
-    private val adapter = Adapter(PhrasesList.toMutableList())
+
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,12 +33,23 @@ class MainActivity : AppCompatActivity() {
 
         val calendar = Calendar.getInstance()
 
-        val recyclerView = binding.recyclerView
-        val linearLayoutManager = LinearLayoutManager(this)
-        val fab = binding.fab
+        db = (applicationContext as PhrasesApplication).database
 
-        recyclerView.layoutManager = linearLayoutManager
+        val dbDao = db.getPhraseDataDao()
+
+        if (dbDao.getAllPhrases().isEmpty()) {
+            PhrasesList.forEach { quote ->
+                dbDao.insert(quote)
+            }
+        }
+
+        adapter = Adapter(dbDao.getAllPhrases())
+
+        val recyclerView = binding.recyclerView
+        recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
+
+        val fab = binding.fab
 
         fab.setOnClickListener {
             showAlertDialog()
@@ -56,8 +69,13 @@ class MainActivity : AppCompatActivity() {
 
         val myCallback = object : SwipeToDelete(this) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                adapter.dataList.removeAt(viewHolder.adapterPosition)
-                adapter.notifyItemRemoved(viewHolder.adapterPosition)
+                val phraseToDelete = dbDao.getAllPhrases()[viewHolder.adapterPosition]
+
+                db.getPhraseDataDao().delete(phraseToDelete)
+                adapter.data = dbDao.getAllPhrases()
+
+                /*adapter.data.removeAt(viewHolder.adapterPosition)
+                adapter.notifyItemRemoved(viewHolder.adapterPosition)*/
             }
         }
         val myHelper = ItemTouchHelper(myCallback)
@@ -117,12 +135,21 @@ class MainActivity : AppCompatActivity() {
             val authorEditText = alertDialogView.findViewById<EditText>(R.id.author_dialog_et)
 
             if (phraseEditText.text.toString() != "") {
-                adapter.dataList.add(
-                    QuoteData(
+                val newPhrase = Phrase(
+                    getString(R.string.quotes, phraseEditText.text),
+                    authorEditText.text.toString()
+                )
+                db.getPhraseDataDao().insert(newPhrase)
+                adapter.data = db.getPhraseDataDao().getAllPhrases()
+
+
+
+                /*adapter.data.add(
+                    Phrase(
                         getString(R.string.quotes, phraseEditText.text),
                         authorEditText.text.toString()
                     )
-                )
+                )*/
                 alertDialogBuilder.dismiss()
             } else
                 alertDialogBuilder.dismiss()
