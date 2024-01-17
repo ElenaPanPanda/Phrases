@@ -12,10 +12,13 @@ import kotlin.random.Random
 
 class BroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
+        val db = (context as PhrasesApplication).database
+        val listPhrases = db.getPhraseDataDao().getAllPhrases()
+
         val myIntent = Intent(context, MainActivity::class.java)
         val pIntent = PendingIntent.getActivity(context, 0, myIntent, PendingIntent.FLAG_IMMUTABLE)
 
-        val randomPhrase = takeRandomPhraseAndAuthor(PhrasesList)
+        val randomPhrase = takeRandomPhraseAndAuthor(listPhrases)
         val title =
             randomPhrase.author.ifEmpty { context.getString(R.string.your_phrase_today) }
 
