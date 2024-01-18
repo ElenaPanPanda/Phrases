@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         val fab = binding.fab
 
         fab.setOnClickListener {
-            showAlertDialog()
+            showDialogAddingPhrase()
         }
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -93,9 +93,9 @@ class MainActivity : AppCompatActivity() {
 
         binding.cardViewReminderSet.setOnClickListener {
             when {
-                weHavePermission() -> showSetTimeDialog()
+                weHavePermission() -> showDialogSetTime()
 
-                showShowExplanation() -> showExplanationDialog()
+                shouldShowExplanation() -> showDialogExplanation()
 
                 else -> askForPermission()
             }
@@ -116,7 +116,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun showExplanationDialog() {
+    private fun showDialogExplanation() {
         AlertDialog.Builder(this)
             .setTitle("Permission required")
             .setMessage("This app needs permission to access this feature.")
@@ -128,7 +128,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SimpleDateFormat")
-    private fun showSetTimeDialog() {
+    private fun showDialogSetTime() {
         val calendar = Calendar.getInstance()
 
         val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
@@ -157,16 +157,16 @@ class MainActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun onRequestNotificationPermissionResult(granted: Boolean) {
         if (granted) {
-            showSetTimeDialog()
-        } else if (!showShowExplanation()) {
-            showWontWorkWithoutPermissionDialog()
+            showDialogSetTime()
+        } else if (!shouldShowExplanation()) {
+            showDialogWontWorkWithoutPermission()
         } else {
             //
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun showShowExplanation(): Boolean {
+    private fun shouldShowExplanation(): Boolean {
         return ActivityCompat
             .shouldShowRequestPermissionRationale(
                 this,
@@ -174,7 +174,7 @@ class MainActivity : AppCompatActivity() {
             )
     }
 
-    private fun showWontWorkWithoutPermissionDialog() {
+    private fun showDialogWontWorkWithoutPermission() {
         AlertDialog.Builder(this)
             .setTitle("Permission required")
             .setMessage(
@@ -212,7 +212,7 @@ class MainActivity : AppCompatActivity() {
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, chosenTime, pendingIntent)
     }
 
-    private fun showAlertDialog() {
+    private fun showDialogAddingPhrase() {
         val alertDialogView =
             LayoutInflater.from(this).inflate(R.layout.alert_dialog_view, null, false)
 
@@ -235,13 +235,6 @@ class MainActivity : AppCompatActivity() {
                 db.getPhraseDataDao().insert(newPhrase)
                 adapter.data = db.getPhraseDataDao().getAllPhrases()
 
-
-                /*adapter.data.add(
-                    Phrase(
-                        getString(R.string.quotes, phraseEditText.text),
-                        authorEditText.text.toString()
-                    )
-                )*/
                 alertDialogBuilder.dismiss()
             } else
                 alertDialogBuilder.dismiss()
