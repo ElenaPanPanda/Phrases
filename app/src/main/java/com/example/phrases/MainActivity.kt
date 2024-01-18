@@ -103,7 +103,6 @@ class MainActivity : AppCompatActivity(), Adapter.RecyclerViewEvent {
     }
 
 
-
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun weHavePermission(): Boolean {
         return ContextCompat.checkSelfPermission(
@@ -243,16 +242,43 @@ class MainActivity : AppCompatActivity(), Adapter.RecyclerViewEvent {
         }
     }
 
-    override fun onItemClick(position: Int) {
-        val text = getString(R.string.toast_you_can_edit)
-        Toast.makeText(
-            this,
-            text, Toast. LENGTH_LONG
-        ).show()
-    }
+    override fun onItemClick(position: Int) {}
 
     override fun onItemLongClick(position: Int) {
-        TODO("Not yet implemented")
+        val dataList = db.getPhraseDataDao().getAllPhrases()
+        val phraseToEdit = dataList[position]
+
+        showDialogEditPhrase(phraseToEdit)
+    }
+
+    private fun showDialogEditPhrase(phraseToEdit: Phrase) {
+        val alertDialogView =
+            LayoutInflater.from(this).inflate(R.layout.alert_dialog_view, null, false)
+
+        val adQuote = alertDialogView.findViewById<EditText>(R.id.phrase_dialog_et)
+        val adAuthor = alertDialogView.findViewById<EditText>(R.id.author_dialog_et)
+        adQuote.setText(phraseToEdit.quote)
+        adAuthor.setText(phraseToEdit.author)
+
+        val alertDialogBuilder = AlertDialog.Builder(this)
+            .setTitle("Edit phrase")
+            .setView(alertDialogView)
+            .setPositiveButton(android.R.string.ok, null)
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
+
+        val positiveButton = alertDialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE)
+        positiveButton.setOnClickListener {
+            val updatedPhrase = phraseToEdit.copy(
+                quote = adQuote.text.toString(),
+                author = adAuthor.text.toString()
+            )
+
+            db.getPhraseDataDao().update(updatedPhrase)
+            adapter.data = db.getPhraseDataDao().getAllPhrases()
+
+            alertDialogBuilder.dismiss()
+        }
     }
 }
 

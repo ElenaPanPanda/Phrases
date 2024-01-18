@@ -35,6 +35,7 @@ class Adapter(
         init {
             view.setOnLongClickListener(this)
         }
+
         override fun onLongClick(v: View?): Boolean {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION){
