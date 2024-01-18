@@ -33,12 +33,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var db: PhraseDatabase
     private lateinit var adapter: Adapter
 
-    private val cameraRequestPermissionLauncher =
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private val notificationRequestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
-            onRequestCameraPermissionResult(granted)
+            onRequestNotificationPermissionResult(granted)
         }
 
-    private val calendar = Calendar.getInstance()
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     @SuppressLint("SimpleDateFormat")
@@ -86,9 +86,6 @@ class MainActivity : AppCompatActivity() {
 
                 db.getPhraseDataDao().delete(phraseToDelete)
                 adapter.data = dbDao.getAllPhrases()
-
-                /*adapter.data.removeAt(viewHolder.adapterPosition)
-                adapter.notifyItemRemoved(viewHolder.adapterPosition)*/
             }
         }
         val myHelper = ItemTouchHelper(myCallback)
@@ -105,6 +102,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun weHavePermission(): Boolean {
         return ContextCompat.checkSelfPermission(
             this,
@@ -112,10 +110,12 @@ class MainActivity : AppCompatActivity() {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun askForPermission() {
-        cameraRequestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+        notificationRequestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun showExplanationDialog() {
         AlertDialog.Builder(this)
             .setTitle("Permission required")
@@ -127,9 +127,11 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun showSetTimeDialog() {
-        val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
+        val calendar = Calendar.getInstance()
 
+        val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
             calendar.set(Calendar.HOUR_OF_DAY, hour)
             calendar.set(Calendar.MINUTE, minute)
             calendar.set(Calendar.SECOND, 0)
@@ -152,18 +154,18 @@ class MainActivity : AppCompatActivity() {
         ).show()
     }
 
-    private fun onRequestCameraPermissionResult(granted: Boolean) {
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun onRequestNotificationPermissionResult(granted: Boolean) {
         if (granted) {
             showSetTimeDialog()
         } else if (!showShowExplanation()) {
-            // "Don't ask again"
             showWontWorkWithoutPermissionDialog()
         } else {
-            // The permission was denied without checking "Don't ask again".
-            // Do nothing, wait for better times…
+            //
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun showShowExplanation(): Boolean {
         return ActivityCompat
             .shouldShowRequestPermissionRationale(
@@ -176,7 +178,7 @@ class MainActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle("Permission required")
             .setMessage(
-                "This app needs permission to access this feature. " +
+                "This app needs permission to access notifications. " +
                         "Please grant it in Settings."
             )
             .setPositiveButton("Grant") { _, _ ->
