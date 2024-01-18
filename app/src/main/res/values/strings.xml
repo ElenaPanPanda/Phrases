@@ -10,4 +10,5 @@
     <string name="author">author</string>
     <string name="quotes">“%1$s“</string>
     <string name="your_phrase_today">Your phrase today</string>
+    <string name="toast_you_can_edit">You can edit Phrase on long click</string>
 </resources>

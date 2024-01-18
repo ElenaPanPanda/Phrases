@@ -28,7 +28,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.phrases.databinding.ActivityMainBinding
 import java.util.Calendar
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), Adapter.RecyclerViewEvent {
     private lateinit var binding: ActivityMainBinding
     private lateinit var db: PhraseDatabase
     private lateinit var adapter: Adapter
@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        adapter = Adapter(dbDao.getAllPhrases())
+        adapter = Adapter(dbDao.getAllPhrases(), this)
 
         val recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -101,6 +101,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun weHavePermission(): Boolean {
@@ -239,6 +241,18 @@ class MainActivity : AppCompatActivity() {
             } else
                 alertDialogBuilder.dismiss()
         }
+    }
+
+    override fun onItemClick(position: Int) {
+        val text = getString(R.string.toast_you_can_edit)
+        Toast.makeText(
+            this,
+            text, Toast. LENGTH_LONG
+        ).show()
+    }
+
+    override fun onItemLongClick(position: Int) {
+        TODO("Not yet implemented")
     }
 }
 
