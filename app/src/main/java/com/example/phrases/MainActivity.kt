@@ -210,6 +210,7 @@ class MainActivity : AppCompatActivity(), Adapter.RecyclerViewEvent {
         val alarmManager: AlarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
         val chosenTime = calendar.timeInMillis
 
+        alarmManager.cancel(pendingIntent)
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, chosenTime, pendingIntent)
     }
 
@@ -242,7 +243,13 @@ class MainActivity : AppCompatActivity(), Adapter.RecyclerViewEvent {
         }
     }
 
-    override fun onItemClick(position: Int) {}
+    override fun onItemClick(position: Int) {
+        val text = getString(R.string.toast_you_can_edit)
+        Toast.makeText(
+            this,
+            text, Toast. LENGTH_LONG
+        ).show()
+    }
 
     override fun onItemLongClick(position: Int) {
         val dataList = db.getPhraseDataDao().getAllPhrases()
