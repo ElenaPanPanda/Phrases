@@ -5,7 +5,7 @@
     <string name="fab">fab</string>
     <string name="delete_button">delete button</string>
     <string name="reminder_time">Reminder set at %1$s</string>
-    <string name="click_to_set_time">click to set time</string>
+    <string name="click_to_set_time">click to set reminder</string>
     <string name="phrase">phrase</string>
     <string name="author">author</string>
     <string name="quotes">“%1$s“</string>

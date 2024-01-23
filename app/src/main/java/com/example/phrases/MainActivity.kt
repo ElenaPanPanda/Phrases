@@ -6,7 +6,9 @@ import android.app.AlertDialog
 import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.icu.text.SimpleDateFormat
 import android.net.Uri
@@ -32,6 +34,7 @@ class MainActivity : AppCompatActivity(), Adapter.RecyclerViewEvent {
     private lateinit var binding: ActivityMainBinding
     private lateinit var db: PhraseDatabase
     private lateinit var adapter: Adapter
+    private lateinit var sharedPreferences: SharedPreferences
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private val notificationRequestPermissionLauncher =
@@ -57,6 +60,10 @@ class MainActivity : AppCompatActivity(), Adapter.RecyclerViewEvent {
         }
 
         adapter = Adapter(dbDao.getAllPhrases(), this)
+
+        sharedPreferences = getPreferences(Context.MODE_PRIVATE)
+        if (sharedPreferences.contains("reminderTime"))
+            binding.reminderTextView.text = getString(R.string.reminder_time, sharedPreferences.getString("reminderTime", "default"))
 
         val recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -144,6 +151,9 @@ class MainActivity : AppCompatActivity(), Adapter.RecyclerViewEvent {
             val reminderTime = SimpleDateFormat("HH:mm").format(calendar.time)
             binding.reminderTextView.text = getString(R.string.reminder_time, reminderTime)
 
+            val editor = sharedPreferences.edit()
+            editor.putString("reminderTime", reminderTime).apply()
+
             createNotification(calendar)
         }
         TimePickerDialog(
@@ -212,6 +222,7 @@ class MainActivity : AppCompatActivity(), Adapter.RecyclerViewEvent {
 
         alarmManager.cancel(pendingIntent)
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, chosenTime, pendingIntent)
+        //alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, chosenTime, 60000, pendingIntent)
     }
 
     private fun showDialogAddingPhrase() {
