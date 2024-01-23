@@ -10,7 +10,12 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 
 class BroadcastReceiver : BroadcastReceiver() {
+
     override fun onReceive(context: Context, intent: Intent) {
+        val sharedPreferences = context.getSharedPreferences(PhrasesApplication.NAME_PREFERENCES, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.remove(PhrasesApplication.REMINDER_KEY).apply()
+
         val db = (context.applicationContext as PhrasesApplication).database
         val listPhrases = db.getPhraseDataDao().getAllPhrases()
 

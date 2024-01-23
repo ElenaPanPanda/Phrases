@@ -30,6 +30,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.phrases.databinding.ActivityMainBinding
 import java.util.Calendar
 
+
+
 class MainActivity : AppCompatActivity(), Adapter.RecyclerViewEvent {
     private lateinit var binding: ActivityMainBinding
     private lateinit var db: PhraseDatabase
@@ -61,7 +63,7 @@ class MainActivity : AppCompatActivity(), Adapter.RecyclerViewEvent {
 
         adapter = Adapter(dbDao.getAllPhrases(), this)
 
-        sharedPreferences = getPreferences(Context.MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences(PhrasesApplication.NAME_PREFERENCES, Context.MODE_PRIVATE)
         if (sharedPreferences.contains("reminderTime"))
             binding.reminderTextView.text = getString(R.string.reminder_time, sharedPreferences.getString("reminderTime", "default"))
 
@@ -140,19 +142,26 @@ class MainActivity : AppCompatActivity(), Adapter.RecyclerViewEvent {
         val calendar = Calendar.getInstance()
 
         val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hour, minute ->
-            calendar.set(Calendar.HOUR_OF_DAY, hour)
-            calendar.set(Calendar.MINUTE, minute)
-            calendar.set(Calendar.SECOND, 0)
 
-            if (calendar.before(Calendar.getInstance())) {
-                calendar.add(Calendar.DATE, 1)
+            calendar.apply {
+                set(Calendar.HOUR_OF_DAY, hour)
+                set(Calendar.MINUTE, minute)
+                set(Calendar.SECOND, 0)
+
+                val now = Calendar.getInstance()
+
+                if (before(now)) {
+                    add(Calendar.DATE, 1)
+                }
             }
 
             val reminderTime = SimpleDateFormat("HH:mm").format(calendar.time)
             binding.reminderTextView.text = getString(R.string.reminder_time, reminderTime)
 
-            val editor = sharedPreferences.edit()
-            editor.putString("reminderTime", reminderTime).apply()
+            sharedPreferences.edit().apply {
+                putString(PhrasesApplication.REMINDER_KEY, reminderTime)
+                apply()
+            }
 
             createNotification(calendar)
         }
