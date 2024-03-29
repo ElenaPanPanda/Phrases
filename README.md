@@ -13,7 +13,7 @@ Adding phrase by fab button and deleting by swiping
 <img src='https://github.com/ElenaPanPanda/Phrases/assets/128897858/5c59c247-d459-4b2c-8b79-168110feacda' width='300'>
 
 
-Work with notifications and RunTimePermissions
+Work with notifications and runtime permissions
 
 <img src='https://github.com/ElenaPanPanda/Phrases/assets/128897858/f7ed8f12-7b81-446f-aa31-b41990434460' width='300'>
 <img src='https://github.com/ElenaPanPanda/Phrases/assets/128897858/9eb793dc-261f-437d-bd9a-1529d74bf0fb' width='300'>
