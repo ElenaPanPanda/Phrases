@@ -1,7 +1,7 @@
 The project from hyperskill.com
 https://hyperskill.org/projects/303
 
-All phrases are saved on database
+All phrases are saved on database (Room)
 
 <img src='https://github.com/ElenaPanPanda/Phrases/assets/128897858/b3073941-8446-4bb0-9c05-ee693cd6cad7' width='300'>
 
